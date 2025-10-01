@@ -1,11 +1,12 @@
-import './App.scss'
+import "./App.scss";
+import AuthPage from "./pages/AuthPage/AuthPage";
 
 function App() {
-
   return (
     <>
+      <AuthPage />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

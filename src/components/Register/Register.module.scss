@@ -1,0 +1,56 @@
+$form-gap: 14px;
+
+.form { display: grid; gap: $form-gap; }
+.label { display: grid; gap: 8px; }
+.caption { font-size: 12px; color: rgba(255,255,255,.75); }
+
+.input {
+  width: 100%;
+  padding: 14px 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 16px;
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  outline: none;
+  transition: 140ms ease;
+  caret-color: #c084fc;
+
+  &::placeholder { color: rgba(255,255,255,.55); }
+  &:hover { background: rgba(255,255,255,.14); }
+  &:focus {
+    background: rgba(255,255,255,.16);
+    border-color: rgba(192,132,252,.55);
+    box-shadow: 0 0 0 4px rgba(192,132,252,.20);
+  }
+}
+
+.primaryBtn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 16px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: linear-gradient(180deg, #9b5cf6, #7b3fe4);
+  box-shadow: 0 12px 24px rgba(123, 63, 228, 0.35);
+  cursor: pointer;
+  transition: 120ms ease;
+
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: translateY(0); box-shadow: 0 6px 16px rgba(123,63,228,.4); }
+}
+
+.linkBtn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 10px 4px;
+  border: 0;
+  background: none;
+  color: rgba(255,255,255,.75);
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover { color: #fff; }
+}
