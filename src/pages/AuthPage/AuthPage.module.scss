@@ -3,17 +3,15 @@ $radius-xl: 16px;
 $blur: 24px;
 
 $surface: rgba(255, 255, 255, 0.02);
-$surface-strong: rgba(255, 255, 255, 0.06);
 $stroke: rgba(255, 255, 255, 0.18);
 $text: #ffffff;
 $text-dim: rgba(255, 255, 255, 0.75);
-
 $shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 
 .screen {
   position: relative;
   isolation: isolate;
-  min-height: 100svh;
+  margin-top: 10%;
   display: grid;
   place-items: center;
   padding: 24px;
@@ -26,19 +24,36 @@ $shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   z-index: 0;
   padding: 32px;
   border-radius: $radius-2xl;
-
+  overflow: hidden;
   background-color: $surface;
-  background-clip: padding-box;
-
   border: 1px solid $stroke;
   box-shadow: $shadow;
 
+  text-shadow: 0 1px 2px rgba(0,0,0,.35);
+
+  > *:not(.liquid) { position: relative; z-index: 1; }
+}
+
+.liquid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(--lg-bg);
+  background-size: var(--lg-bg-size, cover);
+  background-position: var(--lg-bg-position, center);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  filter: url("#lg-distort");
+
   -webkit-backdrop-filter: blur($blur) saturate(170%) contrast(1.08) brightness(1.05);
   backdrop-filter: blur($blur) saturate(170%) contrast(1.08) brightness(1.05);
-  will-change: backdrop-filter;
+  opacity: 0.98;
 
-  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
-
+  will-change: filter;
+  contain: strict;
 }
 
 .tabs {
@@ -61,37 +76,28 @@ $shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 
   &:hover {
     color: $text;
-    background-color: rgba(255, 255, 255, .06);
-    border-color: rgba(255, 255, 255, .12);
+    border-color: rgba(255,255,255,.12);
     -webkit-backdrop-filter: blur(8px) saturate(150%);
     backdrop-filter: blur(8px) saturate(150%);
+    background-color: rgba(255,255,255,.06);
   }
 }
 
 .active {
   color: $text;
-  background-color: rgba(255, 255, 255, .10);
-  border: 1px solid rgba(255, 255, 255, .18);
+  background-color: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .20),
-    inset 0 -1px 0 rgba(0, 0, 0, .10);
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.10);
   -webkit-backdrop-filter: blur(10px) saturate(160%);
   backdrop-filter: blur(10px) saturate(160%);
 }
 
-.hairline {
-  width: 70%;
-  height: 1px;
-  margin: 18px auto 0;
-  background-color: rgba(255, 255, 255, .35);
-  opacity: .9;
-}
-
 @media (prefers-reduced-transparency: reduce) {
+  .liquid { display: none; }
   .card {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    background-color: rgba(28, 28, 32, .92);
+    background-color: rgba(28,28,32,.92);
     text-shadow: none;
   }
 }
