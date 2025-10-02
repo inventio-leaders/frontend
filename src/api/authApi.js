@@ -38,7 +38,20 @@ export const authApi = createApi({
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       }),
     }),
+
+    getMe: builder.query({
+      query: () => ({ url: "/me", method: "GET" }),
+      providesTags: ["Me"],
+    }),
+    logout: builder.mutation({
+      query: () => ({ url: "/auth/jwt/logout", method: "POST" }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useGetMeQuery,
+  useLogoutMutation,
+} = authApi;

@@ -1,0 +1,14 @@
+.shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: 90vh;
+  padding: 16px;
+}
+.main {
+  position: relative;
+  overflow: auto;
+  padding: 16px;
+  border-radius: 0px 16px 16px 0px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(24px);
+}
