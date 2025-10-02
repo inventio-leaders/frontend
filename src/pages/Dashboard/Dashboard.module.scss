@@ -1,17 +1,112 @@
-.grid {
+.page {
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(12, 1fr);
-}
-.grid > *:first-child {
-  grid-column: span 6;
 }
 
-@media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: 1fr;
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: white;
+  label {
+    display: flex;
+    gap: 6px;
+    align-items: center;
   }
-  .grid > * {
-    grid-column: auto;
+  input[type="datetime-local"] {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 8px;
   }
+}
+
+.btn {
+  appearance: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.importBox {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.uploadLabel,
+.primaryUpload {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+.primaryUpload {
+  background: rgba(120, 145, 255, 0.18);
+  border-color: rgba(120, 145, 255, 0.35);
+  margin-top: 20px;
+}
+
+.count {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  backdrop-filter: blur(24px);
+  padding: 16px;
+}
+.cardHeader {
+  margin-bottom: 8px;
+}
+.cardTitle {
+  font-weight: 600;
+  color: white;
+}
+
+.chartWrap {
+  height: 320px;
+}
+
+.empty {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 32px;
+  backdrop-filter: blur(24px);
+  color: white;
+}
+
+.alert {
+  background: rgba(255, 72, 72, 0.15);
+  border: 1px solid rgba(255, 72, 72, 0.35);
+  border-radius: 12px;
+  padding: 10px 12px;
 }

@@ -1,0 +1,37 @@
+.tableWrap {
+  margin-top: 16px;
+  max-height: 300px;
+  overflow: auto;
+  border-radius: 16px;
+  backdrop-filter: blur(24px);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th, td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: rgba(15, 18, 22, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 1;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  tr:hover {
+    background: rgba(255,255,255,0.06);
+  }
+}
