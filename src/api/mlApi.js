@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getSession } from "../utils/session";
 
-const BASE_URL = "http://45.131.40.164:8080";
+const BASE_URL = "http://localhost:8080";
 
 export const mlApi = createApi({
   reducerPath: "mlApi",
@@ -30,6 +30,16 @@ export const mlApi = createApi({
     taskStatus: b.query({
       query: (task_id) => ({ url: `/ml/tasks/${task_id}` }),
     }),
+
+    toggleNotifications: b.mutation({
+      query: () => ({
+        url: "/notifications/toggle",
+        method: "POST",
+      }),
+    }),
+    notificationsStatus: b.query({
+      query: () => ({ url: "/notifications/status" }),
+    }),
   }),
 });
 
@@ -38,4 +48,6 @@ export const {
   useRunForecastMutation,
   useAnomalyScanMutation,
   useLazyTaskStatusQuery,
+  useToggleNotificationsMutation,
+  useNotificationsStatusQuery,
 } = mlApi;

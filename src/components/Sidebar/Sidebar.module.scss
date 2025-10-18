@@ -35,6 +35,15 @@
   cursor: pointer;
 }
 
+.bell {
+  background: transparent;
+  border-radius: 12px;
+  color: #fff;
+  padding: 5px;
+  appearance: none;
+  cursor: pointer;
+}
+
 .nav {
   a {
     text-decoration: none;
@@ -56,5 +65,5 @@
   opacity: 0.6;
 }
 .active {
-  background: rgba(158, 158, 158, 0.20) !important;
+  background: rgba(158, 158, 158, 0.2) !important;
 }

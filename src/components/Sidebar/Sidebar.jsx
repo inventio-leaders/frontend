@@ -3,12 +3,34 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Sidebar.module.scss";
 import { clearSession } from "../../utils/session";
 import { useGetMeQuery, useLogoutMutation } from "../../api/authApi";
+import {
+  useNotificationsStatusQuery,
+  useToggleNotificationsMutation,
+} from "../../api/mlApi";
+
+function BellIcon({ active }) {
+  return active ? (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M12 2a7 7 0 0 0-7 7v4.586l-.707.707A1 1 0 0 0 5 16h14a1 1 0 0 0 .707-1.707L19 13.586V9a7 7 0 0 0-7-7zm0 20a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22z" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M4.707 3.293 3.293 4.707 6.586 8H6v5.586l-1.707 1.707A1 1 0 0 0 5 16h9.586l5.707 5.707 1.414-1.414L4.707 3.293zM8 10.414l4.586 4.586H6v-3.172l2-2zM18 13V9a6 6 0 0 0-9.993-4.472l1.493 1.493A4 4 0 0 1 16 9v3l1 1h1zM12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22z" />
+    </svg>
+  );
+}
 
 export default function Sidebar() {
   const navigate = useNavigate();
 
   const { data: me, isLoading: meLoading } = useGetMeQuery();
   const [doLogout, { isLoading: logoutLoading }] = useLogoutMutation();
+
+  const { data: notifData, refetch } = useNotificationsStatusQuery();
+  const [toggleNotifications, { isLoading: toggleLoading }] =
+    useToggleNotificationsMutation();
+
+  const notificationsEnabled = notifData?.notifications_enabled;
 
   const onLogout = async () => {
     try {
@@ -17,6 +39,15 @@ export default function Sidebar() {
     clearSession();
     navigate("/");
     window.location.reload();
+  };
+
+  const handleToggle = async () => {
+    try {
+      await toggleNotifications().unwrap();
+      refetch();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -30,6 +61,18 @@ export default function Sidebar() {
         </div>
         <button className={styles.close} onClick={onLogout} aria-label="Выйти">
           ✕
+        </button>
+        <button
+          onClick={handleToggle}
+          disabled={toggleLoading}
+          title={
+            notificationsEnabled
+              ? "Выключить уведомления"
+              : "Включить уведомления"
+          }
+          className={styles.bell}
+        >
+          <BellIcon active={notificationsEnabled} />
         </button>
       </div>
 
