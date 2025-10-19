@@ -597,11 +597,6 @@ export default function Training() {
               <div className={styles.modalBody}>
                 <DropletCatchGame onClose={closeGame} />
               </div>
-              <div className={styles.modalFooter}>
-                <button className={styles.btn} onClick={closeGame}>
-                  Закрыть
-                </button>
-              </div>
             </div>
           </div>
         )}
