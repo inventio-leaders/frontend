@@ -124,6 +124,32 @@ export default function Sidebar() {
           </span>{" "}
           Аналитика
         </NavLink>
+        <NavLink
+          to="/training"
+          className={({ isActive }) => (isActive ? styles.active : undefined)}
+        >
+          <span className={styles.icon}>
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="white"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-labelledby="title-train"
+            >
+              <title id="title-train">Тренировка модели</title>
+              <path d="M20 4v6h-6" />
+              <path d="M20 10A8 8 0 1 1 10 4" />
+              <circle cx="12" cy="12" r="2.5" />
+              <path d="M12 7v2M12 15v2M7 12h2M15 12h2M8.8 8.8l1.4 1.4M13.8 13.8l1.4 1.4M15.2 8.8l-1.4 1.4M10.2 13.8l-1.4 1.4" />
+            </svg>
+          </span>{" "}
+          Обучение модели
+        </NavLink>
       </nav>
     </aside>
   );

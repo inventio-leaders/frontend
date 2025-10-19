@@ -1,0 +1,309 @@
+.page {
+  display: grid;
+  gap: 24px;
+  color: #fff;
+}
+
+.section {
+  display: grid;
+  gap: 14px;
+}
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h2 {
+    font-size: 32px;
+  }
+}
+.sub {
+  opacity: 0.7;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 10px 16px;
+  color: #fff;
+  cursor: pointer;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.ghost {
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #fff;
+}
+.ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 12px 14px;
+}
+
+/* форма параметров */
+.formGrid {
+  display: grid;
+  gap: 12px;
+}
+.switches {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.rowCols {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+}
+.field {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+.field input[type="number"] {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #fff;
+}
+.presetRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.hint {
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+/* таблица */
+.tableCard {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  thead {
+    position: sticky;
+    top: 0;
+    background: rgba(20, 22, 26, 0.9);
+    backdrop-filter: blur(4px);
+    z-index: 2;
+  }
+  th,
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  tbody {
+    display: block;
+    max-height: 320px;
+    overflow-y: auto;
+    width: 100%;
+  }
+  thead,
+  tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+  .empty {
+    text-align: center;
+    opacity: 0.8;
+    padding: 12px;
+  }
+}
+
+/* таск */
+.taskInline {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  opacity: 0.9;
+}
+.code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  font-size: 12px;
+  opacity: 0.95;
+}
+
+@media (max-width: 1024px) {
+  .rowCols {
+    grid-template-columns: 1fr 1fr;
+  }
+  .taskInline {
+    grid-template-columns: 1fr;
+  }
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+.clickableRow:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.kvList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.kvKey {
+  display: inline-block;
+  min-width: 140px;
+  opacity: 0.85;
+  margin-right: 10px;
+}
+.kvVal {
+  font-weight: 600;
+}
+
+.jsonBlock {
+  margin: 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  max-height: 360px;
+  overflow: auto;
+  font-size: 13px;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: rgba(8, 10, 14, 0.6);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+.modal {
+  width: min(720px, 92vw);
+  background: rgba(24, 26, 32, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-height: 80vh;
+}
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 16px 16px 10px 16px;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.modalTitle {
+  text-align: left;
+  font-size: 18px;
+}
+.modalSub {
+  opacity: 0.75;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.closeBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.modalBody {
+  padding: 14px 16px;
+  overflow: auto;
+}
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chartToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.chartTitle {
+  margin: 0;
+  font-weight: 600;
+}
+.labelCompact {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-right: 8px;
+}
+.select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #fff;
+}

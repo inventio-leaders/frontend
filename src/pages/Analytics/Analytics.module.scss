@@ -4,13 +4,13 @@
   color: white;
 }
 
+/* глобальный тулбар с периодом и сводными карточками */
 .toolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 280px)) 1fr;
   gap: 16px;
-  flex-wrap: wrap;
   align-items: end;
 }
-
 .field {
   display: grid;
   gap: 6px;
@@ -29,6 +29,57 @@
     opacity: 0.85;
     font-size: 12px;
   }
+}
+.statCards {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 12px;
+  justify-content: end;
+}
+
+.section {
+  display: grid;
+  gap: 14px;
+  border-radius: 16px;
+}
+.sectionHeader {
+  text-align: left;
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    h2 {
+      font-size: 32px;
+    }
+  }
+}
+.sub {
+  opacity: 0.7;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.inlineField {
+  display: block;
+
+  & div {
+    margin-bottom: 5px;
+  }
+}
+.number {
+  width: 90px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 6px 10px;
+  color: #fff;
 }
 
 .checkbox {
@@ -51,14 +102,16 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
-.section {
-  display: grid;
-  gap: 12px;
+.tableCard {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  overflow: hidden;
 }
+
+/* таблицы */
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
 
   thead {
     position: sticky;
@@ -70,15 +123,15 @@
 
   th,
   td {
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     text-align: left;
     font-size: 14px;
   }
 
   tbody {
     display: block;
-    max-height: 300px; /* ограничение по высоте */
+    max-height: 320px;
     overflow-y: auto;
     width: 100%;
   }
@@ -95,28 +148,25 @@
   }
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+.taskInlineHead {
+  text-align: left;
+  font-size: 24px;
+}
+.selectedRow {
+  background: rgba(125, 200, 255, 0.12) !important;
+  outline: 2px solid rgba(122, 162, 255, 0.55);
+  outline-offset: -2px;
 }
 
-.card {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  padding: 14px;
-}
-
-.tasks {
+.taskInline {
   display: grid;
-  gap: 10px;
-}
-.taskRow {
-  display: grid;
-  grid-template-columns: 160px 1fr 120px 120px;
+  grid-template-columns: auto 1fr auto auto;
   gap: 12px;
   align-items: center;
-  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
 }
 .badge {
   display: inline-block;
@@ -125,4 +175,22 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 12px;
   opacity: 0.9;
+}
+
+.card h3 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+  .statCards {
+    justify-content: start;
+    grid-auto-flow: row;
+  }
+  .taskInline {
+    grid-template-columns: 1fr;
+  }
 }
