@@ -26,6 +26,9 @@ import {
   Bar,
 } from "recharts";
 
+import TaskCard from "../../components/TaskCard/TaskCard";
+import DropletCatchGame from "../../components/DropletCatchGame/DropletCatchGame";
+
 const pad2 = (n) => String(n).padStart(2, "0");
 const toLocalInput = (d) =>
   `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(
@@ -35,6 +38,23 @@ const toNaiveLocalISO = (s) =>
   s && s.length === 16 ? `${s}:00` : s || undefined;
 const dayKey = (d) =>
   `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+
+const TASKS_LS_KEY = "analytics_tasks_v1";
+
+const loadTasksFromLS = () => {
+  try {
+    const raw = localStorage.getItem(TASKS_LS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+};
+const saveTasksToLS = (tasks) => {
+  const keep = tasks.filter(
+    (t) => String(t.status || "").toUpperCase() !== "SUCCESS"
+  );
+  localStorage.setItem(TASKS_LS_KEY, JSON.stringify(keep));
+};
 
 export default function Analytics() {
   const defaultFrom = new Date("2025-04-03T00:00:00");
@@ -60,7 +80,6 @@ export default function Analytics() {
 
   const { data: anomaliesCount } = useCountAnomaliesQuery(rangeParams);
   const { data: forecastsCount } = useCountForecastsQuery(rangeParams);
-
 
   const [triggerExport, { isFetching: exporting }] =
     useLazyExportProcessedToXlsxQuery();
@@ -96,10 +115,14 @@ export default function Analytics() {
   const [runForecast, { isLoading: forecasting }] = useRunForecastMutation();
   const [anomalyScan, { isLoading: scanning }] = useAnomalyScanMutation();
   const [fetchTaskStatus] = useLazyTaskStatusQuery();
-  const [tasks, setTasks] = useState([]);
+
+  const [tasks, setTasks] = useState(() => loadTasksFromLS());
+  useEffect(() => {
+    saveTasksToLS(tasks);
+  }, [tasks]);
 
   const pushTask = (task, type) =>
-    setTasks((prev) => [{ ...task, type }, ...prev]);
+    setTasks((prev) => [{ ...task, type, created_at: Date.now() }, ...prev]);
   const lastTaskByType = (type) => tasks.find((t) => t.type === type);
 
   const refreshTask = async (taskId) => {
@@ -108,13 +131,14 @@ export default function Analytics() {
       setTasks((arr) =>
         arr.map((x) => (x.task_id === taskId ? { ...x, ...updated } : x))
       );
-    } catch {}
+    } catch (e) {
+      console.error(e);
+    }
   };
-
   useEffect(() => {
     if (!tasks.length) return;
     const interval = setInterval(
-      () => tasks.forEach((t) => refreshTask(t.task_id)),
+      () => tasks.forEach((t) => t?.task_id && refreshTask(t.task_id)),
       5000
     );
     return () => clearInterval(interval);
@@ -156,6 +180,7 @@ export default function Analytics() {
       alert("Ошибка сканирования");
     }
   };
+
   const handleRunForecast = async () => {
     try {
       const task = await runForecast({ horizon_hours: 48 }).unwrap();
@@ -191,6 +216,17 @@ export default function Analytics() {
     scrollToRow(forecastRowRefs, key);
   };
 
+  const [gameOpen, setGameOpen] = useState(false);
+  const [gameTaskLabel, setGameTaskLabel] = useState("");
+  const openGame = (label) => {
+    setGameTaskLabel(label || "Задача");
+    setGameOpen(true);
+  };
+  const closeGame = () => {
+    setGameOpen(false);
+    setGameTaskLabel("");
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.toolbar}>
@@ -222,6 +258,7 @@ export default function Analytics() {
           </div>
         </div>
       </div>
+
       <section className={styles.section}>
         <header className={styles.sectionHeader}>
           <div className={styles.sectionHeader__head}>
@@ -265,6 +302,7 @@ export default function Analytics() {
             </button>
           </div>
         </header>
+
         <div className={styles.card}>
           <h3>Аномалии по дням</h3>
           <ResponsiveContainer width="100%" height={260}>
@@ -291,6 +329,7 @@ export default function Analytics() {
             </BarChart>
           </ResponsiveContainer>
         </div>
+
         <div className={styles.tableCard}>
           <table className={styles.table}>
             <thead>
@@ -335,26 +374,21 @@ export default function Analytics() {
         </div>
 
         {lastTaskByType("anomaly_scan") && (
-          <>
-            <div className={styles.taskInlineHead}>Задача данной секции</div>
-            <div className={styles.taskInline}>
-              <span className={styles.badge}>anomaly_scan</span>
-              <code>{lastTaskByType("anomaly_scan").task_id}</code>
-              <span className={styles.badge}>
-                {lastTaskByType("anomaly_scan").status}
-              </span>
-              <button
-                className={styles.btn}
-                onClick={() =>
-                  refreshTask(lastTaskByType("anomaly_scan").task_id)
-                }
-              >
-                Обновить статус
-              </button>
-            </div>
-          </>
+          <TaskCard
+            variant="warning"
+            title="Сканирование аномалий"
+            subtitle="ML-проход по периоду"
+            taskId={lastTaskByType("anomaly_scan").task_id}
+            status={lastTaskByType("anomaly_scan").status}
+            result={lastTaskByType("anomaly_scan").result}
+            onRefresh={() =>
+              refreshTask(lastTaskByType("anomaly_scan").task_id)
+            }
+            onPlay={() => openGame("Сканирование аномалий")}
+          />
         )}
       </section>
+
       <section className={styles.section}>
         <header className={styles.sectionHeader}>
           <div className={styles.sectionHeader__head}>
@@ -448,26 +482,42 @@ export default function Analytics() {
             </tbody>
           </table>
         </div>
-
         {lastTaskByType("forecast") && (
-          <>
-            <div className={styles.taskInlineHead}>Задача данной секции</div>
-            <div className={styles.taskInline}>
-              <span className={styles.badge}>forecast</span>
-              <code>{lastTaskByType("forecast").task_id}</code>
-              <span className={styles.badge}>
-                {lastTaskByType("forecast").status}
-              </span>
-              <button
-                className={styles.btn}
-                onClick={() => refreshTask(lastTaskByType("forecast").task_id)}
-              >
-                Обновить статус
-              </button>
-            </div>
-          </>
+          <TaskCard
+            variant="info"
+            title="Прогноз потребления"
+            subtitle="Расчёт горизонта (48 ч)"
+            taskId={lastTaskByType("forecast").task_id}
+            status={lastTaskByType("forecast").status}
+            result={lastTaskByType("forecast").result}
+            onRefresh={() => refreshTask(lastTaskByType("forecast").task_id)}
+            onPlay={() => openGame("Прогноз потребления")}
+          />
         )}
       </section>
+
+      {gameOpen && (
+        <div className={styles.modalBackdrop} role="dialog" aria-modal="true">
+          <div className={styles.modal}>
+            <header className={styles.modalHeader}>
+              <div>
+                <div className={styles.modalTitle}>Игра: «Лови капли»</div>
+                <div className={styles.modalSub}>Задача: {gameTaskLabel}</div>
+              </div>
+              <button
+                className={styles.closeBtn}
+                onClick={closeGame}
+                aria-label="Закрыть"
+              >
+                ✕
+              </button>
+            </header>
+            <div className={styles.modalBody}>
+              <DropletCatchGame onClose={closeGame} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

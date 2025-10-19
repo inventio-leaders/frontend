@@ -1,0 +1,236 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+}
+.glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    600px 300px at var(--mx, 50%) var(--my, 50%),
+    rgba(122, 162, 255, 0.15),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.info {
+  --accent: #7aa2ff;
+}
+.warning {
+  --accent: #ffca7a;
+}
+.success {
+  --accent: #7affb0;
+}
+.danger {
+  --accent: #ff7a7a;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.left {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+}
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.subtitle {
+  opacity: 0.75;
+  font-size: 13px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+}
+.kv {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.k {
+  opacity: 0.6;
+  font-size: 12px;
+}
+.v {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+.badge_pending {
+  color: #bbb;
+}
+.badge_running {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.badge_success {
+  color: #7affb0;
+  border-color: rgba(122, 255, 176, 0.5);
+}
+.badge_failure {
+  color: #ff7a7a;
+  border-color: rgba(255, 122, 122, 0.5);
+}
+
+.right {
+  display: flex;
+  gap: 10px;
+}
+.ghostBtn,
+.primaryBtn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.ghostBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.primaryBtn {
+  background: linear-gradient(180deg, var(--accent), rgba(255, 255, 255, 0.06));
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.primaryBtn:hover {
+  filter: brightness(1.05);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--dot, #aaa);
+}
+.pending {
+  --dot: #bbb;
+  background: #bbb;
+}
+.running {
+  --dot: #7aa2ff;
+  background: #7aa2ff;
+}
+.success {
+  --dot: #7affb0;
+  background: #7affb0;
+}
+.failure {
+  --dot: #ff7a7a;
+  background: #ff7a7a;
+}
+
+/* Прогресс */
+.progressWrap {
+  margin-top: 12px;
+}
+.progressBar {
+  position: relative;
+  height: 8px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.progressStripe {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 0px,
+    rgba(255, 255, 255, 0.25) 10px,
+    rgba(255, 255, 255, 0.05) 10px,
+    rgba(255, 255, 255, 0.05) 20px
+  );
+  animation: slide 1s linear infinite;
+}
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-20px);
+  }
+}
+.static_success {
+  background: linear-gradient(90deg, #7affb0, rgba(122, 255, 176, 0.15));
+}
+.static_failure {
+  background: linear-gradient(90deg, #ff7a7a, rgba(255, 122, 122, 0.15));
+}
+.static_pending {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Result block */
+.result {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+}
+.resultTitle {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+.resultPre {
+  margin: 0;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.resultLink {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  text-decoration: none;
+}
+.resultLink:hover {
+  background: rgba(255, 255, 255, 0.12);
+}

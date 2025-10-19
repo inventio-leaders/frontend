@@ -13,8 +13,33 @@ import {
   Legend,
 } from "recharts";
 
+import TaskCard from "../../components/TaskCard/TaskCard";
+import DropletCatchGame from "../../components/DropletCatchGame/DropletCatchGame";
+
 const fmtDT = (v) => (v ? new Date(v).toLocaleString() : "—");
 const LS_KEY = "training_params_v1";
+
+const TRAIN_TASK_LS_KEY = "training_task_v1";
+const loadTrainTask = () => {
+  try {
+    const raw = localStorage.getItem(TRAIN_TASK_LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+const saveTrainTask = (task) => {
+  if (!task) {
+    localStorage.removeItem(TRAIN_TASK_LS_KEY);
+    return;
+  }
+  const st = String(task.status || "").toUpperCase();
+  if (st === "SUCCESS") {
+    localStorage.removeItem(TRAIN_TASK_LS_KEY);
+  } else {
+    localStorage.setItem(TRAIN_TASK_LS_KEY, JSON.stringify(task));
+  }
+};
 
 function useLockScroll(locked) {
   useEffect(() => {
@@ -97,18 +122,33 @@ export default function Training() {
   const [train, { isLoading: training }] = useTrainMutation();
 
   const [fetchTaskStatus] = useLazyTaskStatusQuery();
-  const [trainTask, setTrainTask] = useState(null);
+  const [trainTask, setTrainTask] = useState(() => loadTrainTask());
 
   const [metricsModel, setMetricsModel] = useState(null);
 
-  useLockScroll(!!metricsModel);
+  const [gameOpen, setGameOpen] = useState(false);
+  const [gameTaskLabel, setGameTaskLabel] = useState("");
+  const openGame = (label) => {
+    setGameTaskLabel(label || "Обучение модели");
+    setGameOpen(true);
+  };
+  const closeGame = () => {
+    setGameOpen(false);
+    setGameTaskLabel("");
+  };
+
+  useLockScroll(!!metricsModel || gameOpen);
+
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "Escape") setMetricsModel(null);
+      if (e.key === "Escape") {
+        if (metricsModel) setMetricsModel(null);
+        if (gameOpen) setGameOpen(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [metricsModel, gameOpen]);
 
   const renderMetrics = (metrics) => {
     if (!metrics || typeof metrics !== "object") {
@@ -181,7 +221,7 @@ export default function Training() {
         seed: Number.isFinite(params.seed) ? Number(params.seed) : undefined,
       };
       const task = await train(body).unwrap();
-      setTrainTask({ ...task, type: "train" });
+      setTrainTask({ ...task, type: "train", created_at: Date.now() });
     } catch (e) {
       console.error(e);
       alert("Ошибка запуска обучения");
@@ -192,11 +232,15 @@ export default function Training() {
     if (!trainTask?.task_id) return;
     try {
       const upd = await fetchTaskStatus(trainTask.task_id).unwrap();
-      setTrainTask((t) => ({ ...t, ...upd }));
+      setTrainTask((t) => (t ? { ...t, ...upd } : upd));
     } catch (e) {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    saveTrainTask(trainTask);
+  }, [trainTask]);
 
   useEffect(() => {
     if (!trainTask?.task_id) return;
@@ -249,13 +293,6 @@ export default function Training() {
     "#ffd43b",
     "#b197fc",
   ];
-
-  const onBarClick = (barProps) => {
-    const row = barProps?.payload;
-    if (!row?.model_id) return;
-    const m = models.find((x) => x.model_id === row.model_id);
-    if (m) setMetricsModel(m);
-  };
 
   return (
     <div className={styles.page}>
@@ -468,7 +505,6 @@ export default function Training() {
                     fill={COLORS[i % COLORS.length]}
                     barSize={14}
                     radius={[4, 4, 4, 4]}
-                    onClick={onBarClick}
                   />
                 ))}
               </BarChart>
@@ -483,16 +519,17 @@ export default function Training() {
         </div>
 
         {trainTask && (
-          <div className={styles.taskInline}>
-            <span className={styles.badge}>train</span>
-            <code className={styles.code}>{trainTask.task_id}</code>
-            <span className={styles.badge}>{trainTask.status || "—"}</span>
-            <button className={styles.btn} onClick={refreshTrainTask}>
-              Обновить статус
-            </button>
-          </div>
+          <TaskCard
+            variant="warning"
+            title="Обучение модели"
+            subtitle="Запущена задача обучения"
+            taskId={trainTask.task_id}
+            status={trainTask.status}
+            result={trainTask.result}
+            onRefresh={refreshTrainTask}
+            onPlay={() => openGame("Обучение модели")}
+          />
         )}
-
         {metricsModel && (
           <div
             className={styles.modalOverlay}
@@ -528,6 +565,40 @@ export default function Training() {
                   className={styles.btn}
                   onClick={() => setMetricsModel(null)}
                 >
+                  Закрыть
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {gameOpen && (
+          <div
+            className={styles.modalOverlay}
+            role="dialog"
+            aria-modal="true"
+            onClick={closeGame}
+          >
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalHeader}>
+                <div>
+                  <h3 className={styles.modalTitle}>Игра: «Лови капли»</h3>
+                  <div className={styles.modalSub}>Задача: {gameTaskLabel}</div>
+                </div>
+                <button
+                  className={styles.closeBtn}
+                  onClick={closeGame}
+                  aria-label="Закрыть"
+                  title="Закрыть"
+                >
+                  ×
+                </button>
+              </div>
+              <div className={styles.modalBody}>
+                <DropletCatchGame onClose={closeGame} />
+              </div>
+              <div className={styles.modalFooter}>
+                <button className={styles.btn} onClick={closeGame}>
                   Закрыть
                 </button>
               </div>

@@ -194,3 +194,63 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* --- Modal for game --- */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 12, 16, 0.65);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: min(880px, 92vw);
+  max-height: 86vh;
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(
+    180deg,
+    rgba(30, 34, 40, 0.96),
+    rgba(20, 22, 26, 0.96)
+  );
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 700;
+}
+.modalSub {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.closeBtn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.modalBody {
+  padding: 16px;
+}

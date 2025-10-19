@@ -1,0 +1,44 @@
+.wrap {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.canvas {
+  width: 100%;
+  max-width: 720px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.controls {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.stats {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
